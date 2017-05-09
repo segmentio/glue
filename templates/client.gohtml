@@ -2,22 +2,19 @@ package {{ .Package }}
 
 import (
   {{ range .Imports }}
+    "github.com/tejasmanohar/glue/client"
     "{{ . }}"
   {{ end }}
 )
 
-type Client interface {
-   Call(method string, args interface{}, reply interface{}) error
-}
-
-func New{{ .Service }}Client(rpcClient Client) *{{ .Service }} {
+func New{{ .Service }}Client(rpcClient client.Client) *{{ .Service }} {
   c := new({{ .Service }})
   c.RPC = rpcClient
   return c
 }
 
 type {{ .Service }} struct {
-  RPC Client
+  RPC client.Client
 }
 
 {{ range .Methods }}

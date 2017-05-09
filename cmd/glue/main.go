@@ -6,15 +6,24 @@ import (
 
 	"github.com/apex/log"
 	"github.com/tejasmanohar/glue"
+	"github.com/tejasmanohar/glue/provider"
+	"github.com/tejasmanohar/glue/provider/gorilla"
 	"github.com/tejasmanohar/glue/provider/stl"
 	"github.com/tejasmanohar/glue/writer"
 )
 
 var debug = flag.Bool("debug", false, "enable debug logs")
+
+// Required
 var name = flag.String("name", "", "target RPC declaration name (e.g. Service in `type Service struct`)")
+var service = flag.String("service", "", "RPC service name (e.g. `Service` in `Service.Method`)")
+
+// Overrides
 var out = flag.String("out", "./client", "output directory")
 var print = flag.Bool("print", false, "output code to stdout instead of file")
-var service = flag.String("service", "", "RPC service name (e.g. `Service` in `Service.Method`)")
+
+// Custom providers (only pick one)
+var gorillaFlag = flag.Bool("gorilla", false, "supports Gorilla rpc method format")
 
 func main() {
 	flag.Parse()
@@ -42,8 +51,13 @@ func main() {
 		}
 	}
 
+	var provider provider.Provider = &stl.Provider{}
+	if *gorillaFlag {
+		provider = gorilla.New(provider)
+	}
+
 	walker := glue.Walker{
-		Provider: &stl.Provider{},
+		Provider: provider,
 		Writer:   wr,
 	}
 
