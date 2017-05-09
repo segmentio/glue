@@ -103,4 +103,4 @@ to support an internal or experimental RPC framework, fork Glue and supply anoth
 
 
 [net/rpc]: https://golang.org/pkg/net/rpc/
-[gorilla/rpc]: github.com/gorilla/rpc
+[gorilla/rpc]: https://github.com/gorilla/rpc
