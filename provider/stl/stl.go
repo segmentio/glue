@@ -1,12 +1,11 @@
 package stl
 
 import (
-	"fmt"
 	"go/types"
-	"reflect"
 
 	"github.com/apex/log"
 	"github.com/tejasmanohar/glue/provider"
+	"github.com/tejasmanohar/glue/provider/internal"
 )
 
 // Provider is a Glue provider for net/rpc.
@@ -30,14 +29,14 @@ func (p *Provider) IsSuitableMethod(method *types.Func) bool {
 	}
 
 	arg := params.At(0)
-	if !isExportedOrBuiltin(arg.Type()) {
+	if !internal.IsExportedOrBuiltin(arg.Type()) {
 		log.Debugf("skipping %s: argument parameter's type is not exported", method.Name())
 		return false
 	}
 
 	reply := params.At(1)
 	replyType := reply.Type()
-	if !isExportedOrBuiltin(replyType) {
+	if !internal.IsExportedOrBuiltin(replyType) {
 		log.Debugf("skipping %s: reply parameter's type is not exported", method.Name())
 		return false
 	}
@@ -66,7 +65,7 @@ func (p *Provider) GetArgType(f *types.Func) provider.TypeInfo {
 	signature := f.Type().(*types.Signature)
 	params := signature.Params()
 	arg := params.At(0)
-	return getTypeInfo(arg.Type())
+	return internal.GetTypeInfo(arg.Type())
 }
 
 // GetReplyType extracts metadata about the response type from an RPC method.
@@ -74,52 +73,5 @@ func (p *Provider) GetReplyType(f *types.Func) provider.TypeInfo {
 	signature := f.Type().(*types.Signature)
 	params := signature.Params()
 	reply := params.At(1)
-	return getTypeInfo(reply.Type())
+	return internal.GetTypeInfo(reply.Type())
 }
-
-func getTypeInfo(t types.Type) provider.TypeInfo {
-	t = unpack(t)
-
-	switch specific := t.(type) {
-	case *types.Named:
-		return provider.TypeInfo{
-			Name:    specific.Obj().Name(),
-			Package: specific.Obj().Pkg(),
-		}
-	case *types.Basic:
-		return provider.TypeInfo{
-			Name: specific.Name(),
-		}
-	}
-
-	panic(fmt.Errorf("unexpected type: %s", reflect.TypeOf(t)))
-}
-
-func isExportedOrBuiltin(t types.Type) bool {
-	t = unpack(t)
-
-	if _, isPrimitive := t.(*types.Basic); isPrimitive {
-		return true
-	}
-
-	namedType, ok := t.(*types.Named)
-	if !ok {
-		return false
-	}
-
-	obj := namedType.Obj()
-	if obj == nil {
-		return false
-	}
-
-	return obj.Exported()
-}
-
-func unpack(t types.Type) types.Type {
-	if ptr, ok := t.(*types.Pointer); ok {
-		return ptr.Elem()
-	}
-	return t
-}
-
-var _ provider.Provider = (*Provider)(nil)

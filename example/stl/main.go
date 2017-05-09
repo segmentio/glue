@@ -18,7 +18,7 @@ func main() {
 		panic(err)
 	}
 
-	if err := rpc.RegisterName("Math", &math.Service{}); err != nil {
+	if err := rpc.RegisterName("Math", new(math.Service)); err != nil {
 		panic(err)
 	}
 
