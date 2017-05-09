@@ -1,6 +1,8 @@
 # Glue
 
-Glue generates client code for your [net/rpc] Go RPC server.
+Glue generates client code for your Go RPC server. It currently supports
+- [net/rpc]
+- [gorilla/rpc]
 
 **Status:** Glue is still extremely immature. It needs tests, feedback, and more.
 Still, it's functional so try it out and contribute! Just don't be surprised by
@@ -75,6 +77,10 @@ func (c *Math) Sum(args math.SumArg) (*math.SumReply, error) {
 }
 ```
 
+## Gorilla
+
+If you use [gorilla/rpc], you're in luck! Just specify `-gorilla`.
+
 
 ## Options
 
@@ -88,8 +94,8 @@ To output code to STDOUT instead of files, supply `-print`.
 ## FAQ
 
 ### How do I use Glue with RPC implementation X?
-Glue is modular. If you'd like support for a popular (or interesting, well-maintained)
-RPC implementation other than [net/rpc], open a PR to add a new Glue `provider/`.
+Glue is modular. If you'd like support for another popular (or interesting, well-maintained)
+RPC implementation, open a PR to add a new Glue `provider/`.
 
 Unfortunately, Go doesn't allow dynamic loading of packages so if you'd like Glue
 to support an internal or experimental RPC framework, fork Glue and supply another
