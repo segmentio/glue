@@ -29,18 +29,29 @@ func IsExportedOrBuiltin(t types.Type) bool {
 	return obj.Exported()
 }
 
-// Unpack unpacks the underlying type from a pointer if wrapped.
+// Unpack unpacks the most basic, underlying type from pointers, slices, etc.
 func Unpack(t types.Type) types.Type {
 	if ptr, ok := t.(*types.Pointer); ok {
-		return ptr.Elem()
+		return Unpack(ptr.Elem())
 	}
+
+	if slice, ok := t.(*types.Slice); ok {
+		return Unpack(slice.Elem())
+	}
+
+	if array, ok := t.(*types.Array); ok {
+		return Unpack(array.Elem())
+	}
+
 	return t
 }
 
 // GetTypeInfo derives provider.TypeInfo, a Glue construct for metadata about a type,
 // from a types.Type.
 func GetTypeInfo(t types.Type) provider.TypeInfo {
-	t = Unpack(t)
+	if ptr, ok := t.(*types.Pointer); ok {
+		t = ptr.Elem()
+	}
 
 	switch specific := t.(type) {
 	case *types.Named:
@@ -51,6 +62,17 @@ func GetTypeInfo(t types.Type) provider.TypeInfo {
 	case *types.Basic:
 		return provider.TypeInfo{
 			Name: specific.Name(),
+		}
+	case *types.Slice:
+		return provider.TypeInfo{
+			// e.g. String() => []int
+			Name:    specific.String(),
+			Package: GetTypeInfo(specific.Elem()).Package,
+		}
+	case *types.Array:
+		return provider.TypeInfo{
+			Name:    specific.String(),
+			Package: GetTypeInfo(specific.Elem()).Package,
 		}
 	}
 
