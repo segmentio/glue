@@ -27,3 +27,8 @@ func (s *Service) Identity(r *http.Request, arg *int, reply *int) error {
 	*reply = *arg
 	return nil
 }
+
+func (s *Service) IdentityMany(r *http.Request, arg *[]int, reply *[]int) error {
+	reply = arg
+	return nil
+}

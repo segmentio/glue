@@ -26,3 +26,9 @@ func (c *Math) Identity(args int) (*int, error) {
 	err := c.RPC.Call("Math.Identity", args, reply)
 	return reply, err
 }
+
+func (c *Math) IdentityMany(args []int) (*[]int, error) {
+	reply := new([]int)
+	err := c.RPC.Call("Math.IdentityMany", args, reply)
+	return reply, err
+}
