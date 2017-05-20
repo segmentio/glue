@@ -2,7 +2,6 @@ package glue
 
 import (
 	"bytes"
-	"fmt"
 	"go/types"
 	"html/template"
 
@@ -18,8 +17,7 @@ var tmpl = mustParseTemplate("templates/client.gohtml")
 
 // Generator creates the output Golang net/rpc client code.
 type Generator struct {
-	Provider  provider.Provider
-	SourcePkg string
+	Provider provider.Provider
 }
 
 // TemplateData structures input to the template/client.gohtml template.
@@ -63,17 +61,18 @@ func (g *Generator) Generate(in GenerateInput) ([]byte, error) {
 
 	pkgs := gen.NewStringSet()
 	for _, f := range in.Funcs {
+		argInfo := g.Provider.GetArgType(f)
+		replyInfo := g.Provider.GetReplyType(f)
 		data.Methods = append(data.Methods, MethodTemplate{
 			Name:      f.Name(),
-			ArgType:   g.Provider.GetArgType(f).Identifier(),
-			ReplyType: g.Provider.GetReplyType(f).Identifier(),
+			ArgType:   argInfo.Identifier,
+			ReplyType: replyInfo.Identifier,
 		})
 
-		fImports := g.getFuncImports(f)
-		pkgs = pkgs.Union(fImports)
+		pkgs.AddList(argInfo.Imports)
+		pkgs.AddList(replyInfo.Imports)
 	}
 
-	pkgs.Discard(g.SourcePkg)
 	data.Imports = pkgs.AsList()
 
 	var src bytes.Buffer
@@ -83,7 +82,12 @@ func (g *Generator) Generate(in GenerateInput) ([]byte, error) {
 		return nil, err
 	}
 
-	formatted, err := imports.Process(fmt.Sprintf("client.go", in.Service), src.Bytes(), nil)
+	formatted, err := imports.Process("client.go", src.Bytes(), nil)
+	if err != nil {
+		log.WithField("code", src.String()).WithError(err).Error("failed to format code")
+		return nil, err
+	}
+
 	return formatted, err
 }
 

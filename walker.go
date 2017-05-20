@@ -1,6 +1,7 @@
 package glue
 
 import (
+	"errors"
 	"fmt"
 	"sync"
 
@@ -59,6 +60,11 @@ func (w *Walker) walkPackage(pkg *loader.PackageInfo, decl, service string) erro
 		Declaration: decl,
 	})
 	funcsByRecv := visitor.Go()
+
+	if len(funcsByRecv) == 0 {
+		log.Error("could not find any RPC services")
+		return errors.New("not found")
+	}
 
 	for _, funcs := range funcsByRecv {
 		generator := Generator{

@@ -46,35 +46,41 @@ func Unpack(t types.Type) types.Type {
 	return t
 }
 
-// GetTypeInfo derives provider.TypeInfo, a Glue construct for metadata about a type,
-// from a types.Type.
 func GetTypeInfo(t types.Type) provider.TypeInfo {
-	if ptr, ok := t.(*types.Pointer); ok {
-		t = ptr.Elem()
-	}
-
 	switch specific := t.(type) {
+	case *types.Pointer:
+		return GetTypeInfo(specific.Elem())
 	case *types.Named:
+		obj := specific.Obj()
 		return provider.TypeInfo{
-			Name:    specific.Obj().Name(),
-			Package: specific.Obj().Pkg(),
+			Identifier: fmt.Sprintf("%s.%s", obj.Pkg().Name(), obj.Name()),
+			Imports:    []string{obj.Pkg().Path()},
 		}
 	case *types.Basic:
 		return provider.TypeInfo{
-			Name: specific.Name(),
+			Identifier: specific.Name(),
 		}
 	case *types.Slice:
+		underlying := GetTypeInfo(specific.Elem())
 		return provider.TypeInfo{
-			// e.g. String() => []int
-			Name:    specific.String(),
-			Package: GetTypeInfo(specific.Elem()).Package,
+			Identifier: fmt.Sprintf("[]%s", underlying.Identifier),
+			Imports:    underlying.Imports,
 		}
 	case *types.Array:
+		underlying := GetTypeInfo(specific.Elem())
 		return provider.TypeInfo{
-			Name:    specific.String(),
-			Package: GetTypeInfo(specific.Elem()).Package,
+			Identifier: fmt.Sprintf("[]%s", underlying.Identifier),
+			Imports:    underlying.Imports,
 		}
-	}
+	case *types.Map:
+		key := GetTypeInfo(specific.Key())
+		val := GetTypeInfo(specific.Elem())
 
-	panic(fmt.Errorf("unexpected type: %s", reflect.TypeOf(t)))
+		return provider.TypeInfo{
+			Identifier: fmt.Sprintf("map[%s]%s", key.Identifier, val.Identifier),
+			Imports:    append(key.Imports, val.Imports...),
+		}
+	default:
+		panic(fmt.Errorf("unexpected type: %s", reflect.TypeOf(t)))
+	}
 }

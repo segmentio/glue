@@ -32,3 +32,15 @@ func (s *Service) IdentityMany(r *http.Request, arg *[]int, reply *[]int) error 
 	reply = arg
 	return nil
 }
+
+type IdentityStruct struct {
+	Val int
+}
+
+func (s *Service) IdentityManyStruct(r *http.Request, arg *[]*IdentityStruct, reply *[]IdentityStruct) error {
+	*reply = []IdentityStruct{}
+	for _, a := range *arg {
+		*reply = append(*reply, IdentityStruct{a.Val})
+	}
+	return nil
+}
