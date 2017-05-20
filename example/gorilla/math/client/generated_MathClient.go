@@ -32,3 +32,9 @@ func (c *Math) IdentityMany(args []int) (*[]int, error) {
 	err := c.RPC.Call("Math.IdentityMany", args, reply)
 	return reply, err
 }
+
+func (c *Math) IdentityManyStruct(args []math.IdentityStruct) (*[]math.IdentityStruct, error) {
+	reply := new([]math.IdentityStruct)
+	err := c.RPC.Call("Math.IdentityManyStruct", args, reply)
+	return reply, err
+}
