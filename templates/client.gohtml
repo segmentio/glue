@@ -1,8 +1,8 @@
 package {{ .Package }}
 
 import (
+  "github.com/tejasmanohar/glue/client"
   {{ range .Imports }}
-    "github.com/tejasmanohar/glue/client"
     "{{ . }}"
   {{ end }}
 )
