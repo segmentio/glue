@@ -3,7 +3,7 @@ package stl
 import (
 	"go/types"
 
-	"github.com/apex/log"
+	"github.com/tejasmanohar/glue/log"
 	"github.com/tejasmanohar/glue/provider"
 	"github.com/tejasmanohar/glue/provider/internal"
 )

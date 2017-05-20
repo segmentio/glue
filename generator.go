@@ -7,8 +7,8 @@ import (
 
 	"golang.org/x/tools/imports"
 
-	"github.com/apex/log"
 	"github.com/tejasmanohar/glue/internal/gen"
+	"github.com/tejasmanohar/glue/log"
 	"github.com/tejasmanohar/glue/provider"
 )
 
@@ -78,13 +78,13 @@ func (g *Generator) Generate(in GenerateInput) ([]byte, error) {
 	var src bytes.Buffer
 	err := tmpl.Execute(&src, data)
 	if err != nil {
-		log.WithError(err).Error("failed to render template")
+		log.Printf("failed to render template: %s", err.Error())
 		return nil, err
 	}
 
 	formatted, err := imports.Process("client.go", src.Bytes(), nil)
 	if err != nil {
-		log.WithField("code", src.String()).WithError(err).Error("failed to format code")
+		log.Printf("failed to format code: \nCODE:\n%s \nERR:\n%s", src.String(), err.Error())
 		return nil, err
 	}
 

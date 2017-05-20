@@ -4,8 +4,8 @@ import (
 	"flag"
 	"os"
 
-	"github.com/apex/log"
 	"github.com/tejasmanohar/glue"
+	"github.com/tejasmanohar/glue/log"
 	"github.com/tejasmanohar/glue/provider"
 	"github.com/tejasmanohar/glue/provider/gorilla"
 	"github.com/tejasmanohar/glue/provider/stl"
@@ -29,15 +29,17 @@ func main() {
 	flag.Parse()
 
 	if *debug {
-		log.SetLevel(log.DebugLevel)
+		log.DebugMode = true
 	}
 
 	if *service == "" {
-		log.Fatal("-service is required")
+		log.Print("-service is required")
+		os.Exit(2)
 	}
 
 	if *name == "" {
-		log.Fatal("-name is required")
+		log.Print("-name is required")
+		os.Exit(2)
 	}
 
 	var wr writer.Writer
@@ -62,7 +64,6 @@ func main() {
 	}
 
 	var path string
-
 	args := flag.Args()
 	if len(args) == 0 {
 		path = "."

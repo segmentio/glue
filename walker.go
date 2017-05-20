@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/apex/log"
+	"github.com/tejasmanohar/glue/log"
 	"github.com/tejasmanohar/glue/provider"
 	"github.com/tejasmanohar/glue/writer"
 	"golang.org/x/tools/go/loader"
@@ -36,7 +36,7 @@ func (w *Walker) Walk(directions Directions) error {
 
 	prgm, err := conf.Load()
 	if err != nil {
-		log.WithError(err).Fatal("failed to parse Go code")
+		log.Printf("failed to parse Go code: %s", err.Error())
 		return err
 	}
 
@@ -62,7 +62,7 @@ func (w *Walker) walkPackage(pkg *loader.PackageInfo, decl, service string) erro
 	funcsByRecv := visitor.Go()
 
 	if len(funcsByRecv) == 0 {
-		log.Error("could not find any RPC services")
+		log.Print("could not find RPC declaration")
 		return errors.New("not found")
 	}
 

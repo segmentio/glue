@@ -1,32 +1,16 @@
 package writer
 
 import (
-	"bufio"
-	"os"
-
-	"github.com/apex/log"
+	"github.com/tejasmanohar/glue/log"
 )
 
-type StdoutWriter struct {
-	Writer *bufio.Writer
-}
+type StdoutWriter struct{}
 
 func NewStdoutWriter() *StdoutWriter {
-	return &StdoutWriter{
-		Writer: bufio.NewWriter(os.Stdout),
-	}
+	return &StdoutWriter{}
 }
 
 func (s *StdoutWriter) Write(_path string, data []byte) error {
-	if _, err := s.Writer.Write(data); err != nil {
-		log.WithError(err).Error("failed to buffer write")
-		return err
-	}
-
-	if err := s.Writer.Flush(); err != nil {
-		log.WithError(err).Error("failed to flush to stdout")
-		return err
-	}
-
+	log.Print(data)
 	return nil
 }
