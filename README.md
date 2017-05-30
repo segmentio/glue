@@ -4,10 +4,6 @@ Glue generates client code for your Go RPC server. It currently supports
 - [net/rpc]
 - [gorilla/rpc]
 
-**Status:** Glue is still extremely immature. It needs tests, feedback, and more.
-Still, it's functional so try it out and contribute! Just don't be surprised by
-breaking changes.
-
 
 ## Installation
 
