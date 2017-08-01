@@ -1,7 +1,7 @@
 package writer
 
 import (
-	"github.com/tejasmanohar/glue/log"
+	"github.com/segmentio/glue/log"
 )
 
 type StdoutWriter struct{}

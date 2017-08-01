@@ -7,9 +7,9 @@ import (
 
 	"golang.org/x/tools/imports"
 
-	"github.com/tejasmanohar/glue/internal/gen"
-	"github.com/tejasmanohar/glue/log"
-	"github.com/tejasmanohar/glue/provider"
+	"github.com/segmentio/glue/internal/gen"
+	"github.com/segmentio/glue/log"
+	"github.com/segmentio/glue/provider"
 )
 
 //go:generate go-bindata -nomemcopy -pkg glue templates/...

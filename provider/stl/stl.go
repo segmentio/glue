@@ -3,9 +3,9 @@ package stl
 import (
 	"go/types"
 
-	"github.com/tejasmanohar/glue/log"
-	"github.com/tejasmanohar/glue/provider"
-	"github.com/tejasmanohar/glue/provider/internal"
+	"github.com/segmentio/glue/log"
+	"github.com/segmentio/glue/provider"
+	"github.com/segmentio/glue/provider/internal"
 )
 
 // Provider is a Glue provider for net/rpc.

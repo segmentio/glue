@@ -7,7 +7,7 @@ Glue generates client code for your Go RPC server. It currently supports
 
 ## Installation
 
-`go get github.com/tejasmanohar/glue/cmd/glue`
+`go get github.com/segmentio/glue/cmd/glue`
 
 Then, `glue` should be available at `$GOPATH/bin/glue` (ideally, in your `$PATH`).
 
@@ -49,7 +49,7 @@ func (s *Service) Sum(arg SumArg, reply *SumReply) error {
 package client
 
 import (
-	"github.com/tejasmanohar/glue/example/stl/math"
+	"github.com/segmentio/glue/example/stl/math"
 )
 
 type Client interface {
@@ -95,7 +95,7 @@ RPC implementation, open a PR to add a new Glue `provider/`.
 
 Unfortunately, Go doesn't allow dynamic loading of packages so if you'd like Glue
 to support an internal or experimental RPC framework, fork Glue and supply another
-`provider` in [cmd/glue/main.go](https://github.com/tejasmanohar/glue/blob/master/cmd/glue/main.go).
+`provider` in [cmd/glue/main.go](https://github.com/segmentio/glue/blob/master/cmd/glue/main.go).
 
 
 [net/rpc]: https://golang.org/pkg/net/rpc/

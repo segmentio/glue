@@ -4,7 +4,7 @@ import (
 	"net"
 	"net/rpc"
 
-	"github.com/tejasmanohar/glue/example/stl/math"
+	"github.com/segmentio/glue/example/stl/math"
 )
 
 func main() {

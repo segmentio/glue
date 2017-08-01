@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/tejasmanohar/glue/log"
-	"github.com/tejasmanohar/glue/provider"
-	"github.com/tejasmanohar/glue/writer"
+	"github.com/segmentio/glue/log"
+	"github.com/segmentio/glue/provider"
+	"github.com/segmentio/glue/writer"
 	"golang.org/x/tools/go/loader"
 )
 

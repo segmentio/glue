@@ -4,12 +4,12 @@ import (
 	"flag"
 	"os"
 
-	"github.com/tejasmanohar/glue"
-	"github.com/tejasmanohar/glue/log"
-	"github.com/tejasmanohar/glue/provider"
-	"github.com/tejasmanohar/glue/provider/gorilla"
-	"github.com/tejasmanohar/glue/provider/stl"
-	"github.com/tejasmanohar/glue/writer"
+	"github.com/segmentio/glue"
+	"github.com/segmentio/glue/log"
+	"github.com/segmentio/glue/provider"
+	"github.com/segmentio/glue/provider/gorilla"
+	"github.com/segmentio/glue/provider/stl"
+	"github.com/segmentio/glue/writer"
 )
 
 var debug = flag.Bool("debug", false, "enable debug logs")

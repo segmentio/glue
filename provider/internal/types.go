@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/tejasmanohar/glue/provider"
+	"github.com/segmentio/glue/provider"
 )
 
 // IsExportedOrBuiltin returns true if a type is either exported or primitive.

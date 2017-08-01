@@ -6,8 +6,8 @@ import (
 
 	"github.com/gohttp/jsonrpc-client"
 
-	"github.com/tejasmanohar/glue/example/gorilla/math"
-	"github.com/tejasmanohar/glue/example/gorilla/math/client"
+	"github.com/segmentio/glue/example/gorilla/math"
+	"github.com/segmentio/glue/example/gorilla/math/client"
 )
 
 var mathClient *client.Math

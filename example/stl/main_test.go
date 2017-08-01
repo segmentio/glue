@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tejasmanohar/glue/example/stl/math"
-	"github.com/tejasmanohar/glue/example/stl/math/client"
+	"github.com/segmentio/glue/example/stl/math"
+	"github.com/segmentio/glue/example/stl/math/client"
 )
 
 var mathClient *client.Math

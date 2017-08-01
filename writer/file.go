@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/tejasmanohar/glue/log"
+	"github.com/segmentio/glue/log"
 )
 
 type FileWriter struct {

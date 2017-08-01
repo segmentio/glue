@@ -4,7 +4,7 @@ import (
 	"go/ast"
 	"go/types"
 
-	"github.com/tejasmanohar/glue/provider"
+	"github.com/segmentio/glue/provider"
 
 	"golang.org/x/tools/go/loader"
 )

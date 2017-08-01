@@ -6,7 +6,7 @@ import (
 
 	"github.com/gorilla/rpc"
 	"github.com/gorilla/rpc/json"
-	"github.com/tejasmanohar/glue/example/gorilla/math"
+	"github.com/segmentio/glue/example/gorilla/math"
 )
 
 func main() {
