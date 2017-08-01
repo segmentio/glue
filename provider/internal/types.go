@@ -11,41 +11,54 @@ import (
 )
 
 // IsExportedOrBuiltin returns true if a type is either exported or primitive.
-func IsExportedOrBuiltin(t types.Type) bool {
-	t = Unpack(t)
+//
+// Note(tejasmanohar): If the type is a map, both the key and value must be exported
+// since they're both necessary to represent the type.
+func IsExportedOrBuiltin(_t types.Type) bool {
+	for _, t := range Unpack(_t) {
+		if _, isPrimitive := t.(*types.Basic); isPrimitive {
+			return true
+		}
 
-	if _, isPrimitive := t.(*types.Basic); isPrimitive {
-		return true
+		namedType, ok := t.(*types.Named)
+		if !ok {
+			return false
+		}
+
+		obj := namedType.Obj()
+		if obj == nil {
+			return false
+		}
+
+		if !obj.Exported() {
+			return false
+		}
 	}
 
-	namedType, ok := t.(*types.Named)
-	if !ok {
-		return false
-	}
-
-	obj := namedType.Obj()
-	if obj == nil {
-		return false
-	}
-
-	return obj.Exported()
+	return true
 }
 
-// Unpack unpacks the most basic, underlying type from pointers, slices, etc.
-func Unpack(t types.Type) types.Type {
+// Unpack unpacks the most basic, underlying types from pointers, slices, maps, etc.
+// There can be multiple types in the case of maps (key and value).
+// Note(tejasmanohar): Are there any other structures that have multiple types
+// that we need to validate are exported? Structs don't have to have all fields exported
+// as we can just not encode the ones that aren't.
+func Unpack(t types.Type) []types.Type {
+	ret := make([]types.Type, 0, 1)
+
 	if ptr, ok := t.(*types.Pointer); ok {
-		return Unpack(ptr.Elem())
+		ret = append(ret, Unpack(ptr.Elem())...)
 	}
 
 	if slice, ok := t.(*types.Slice); ok {
-		return Unpack(slice.Elem())
+		ret = append(ret, Unpack(slice.Elem())...)
 	}
 
 	if array, ok := t.(*types.Array); ok {
-		return Unpack(array.Elem())
+		ret = append(ret, Unpack(array.Elem())...)
 	}
 
-	return t
+	return ret
 }
 
 func GetTypeInfo(t types.Type) provider.TypeInfo {
