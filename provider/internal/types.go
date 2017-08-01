@@ -97,6 +97,14 @@ func GetTypeInfo(t types.Type) provider.TypeInfo {
 			Identifier: fmt.Sprintf("map[%s]%s", key.Identifier, val.Identifier),
 			Imports:    append(key.Imports, val.Imports...),
 		}
+	case *types.Interface:
+		if !specific.Empty() {
+			// TODO(tejasmanohar): This shouldn't really be a "panic", as it's not a
+			// developer error but a user one. Figure that out later.
+			panic("non-empty interfaces are not cannot be JSON-encoded")
+		}
+
+		ret = provider.TypeInfo{Identifier: "interface{}"}
 	default:
 		panic(fmt.Errorf("unexpected type: %s", reflect.TypeOf(t)))
 	}
