@@ -1,7 +1,8 @@
 package client
 
 import (
-	"github.com/segmentio/glue/client"
+	"github.com/tejasmanohar/glue/client"
+
 	"github.com/segmentio/glue/example/gorilla/math"
 )
 
@@ -36,5 +37,11 @@ func (c *Math) IdentityMany(args []int) (*[]int, error) {
 func (c *Math) IdentityManyStruct(args []math.IdentityStruct) (*[]math.IdentityStruct, error) {
 	reply := new([]math.IdentityStruct)
 	err := c.RPC.Call("Math.IdentityManyStruct", args, reply)
+	return reply, err
+}
+
+func (c *Math) MapOfPrimitives(args map[string]string) (*[]int, error) {
+	reply := new([]int)
+	err := c.RPC.Call("Math.MapOfPrimitives", args, reply)
 	return reply, err
 }

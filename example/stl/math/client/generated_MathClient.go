@@ -1,7 +1,8 @@
 package client
 
 import (
-	"github.com/segmentio/glue/client"
+	"github.com/tejasmanohar/glue/client"
+
 	"github.com/segmentio/glue/example/stl/math"
 )
 

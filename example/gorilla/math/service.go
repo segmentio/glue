@@ -1,10 +1,11 @@
 package math
 
 import (
+	"fmt"
 	"net/http"
 )
 
-//go:generate glue -gorilla -name Service -service Math
+//go:generate glue -gorilla -name Service -service Math -debug
 type Service struct{}
 
 type SumArg struct {
@@ -42,5 +43,11 @@ func (s *Service) IdentityManyStruct(r *http.Request, arg *[]*IdentityStruct, re
 	for _, a := range *arg {
 		*reply = append(*reply, IdentityStruct{a.Val})
 	}
+	return nil
+}
+
+func (s *Service) MapOfPrimitives(r *http.Request, arg map[string]string, reply *[]int) error {
+	*reply = []int{1, 2, 3}
+	fmt.Println(arg)
 	return nil
 }
