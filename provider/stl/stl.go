@@ -30,19 +30,18 @@ func (p *Provider) IsSuitableMethod(method *types.Func) bool {
 
 	arg := params.At(0)
 	if !internal.IsExportedOrBuiltin(arg.Type()) {
-		log.Debugf("skipping %s: argument parameter's type is not exported", method.Name())
+		log.Debugf("skipping %s: argument parameter's type %s is not exported", method.Name(), arg.Type())
 		return false
 	}
 
 	reply := params.At(1)
-	replyType := reply.Type()
-	if !internal.IsExportedOrBuiltin(replyType) {
-		log.Debugf("skipping %s: reply parameter's type is not exported", method.Name())
+	if !internal.IsExportedOrBuiltin(reply.Type()) {
+		log.Debugf("skipping %s: reply parameter's type %s is not exported", method.Name(), reply.Type())
 		return false
 	}
 
-	if _, ok := replyType.(*types.Pointer); !ok {
-		log.Debugf("skipping %s: reply type is not a pointer")
+	if _, ok := reply.Type().(*types.Pointer); !ok {
+		log.Debugf("skipping %s: reply type %s is not a pointer", method.Name(), reply.Type())
 		return false
 	}
 
