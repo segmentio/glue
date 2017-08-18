@@ -86,7 +86,7 @@ func GetTypeInfo(t types.Type) provider.TypeInfo {
 	case *types.Array:
 		underlying := GetTypeInfo(specific.Elem())
 		ret = provider.TypeInfo{
-			Identifier: fmt.Sprintf("[]%s", underlying.Identifier),
+			Identifier: fmt.Sprintf("[%d]%s", specific.Len(), underlying.Identifier),
 			Imports:    underlying.Imports,
 		}
 	case *types.Map:
