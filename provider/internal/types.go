@@ -97,6 +97,8 @@ func GetTypeInfo(t types.Type) provider.TypeInfo {
 			Identifier: fmt.Sprintf("map[%s]%s", key.Identifier, val.Identifier),
 			Imports:    append(key.Imports, val.Imports...),
 		}
+	case *types.Struct:
+		ret = provider.TypeInfo{Identifier: "struct{}"}
 	case *types.Interface:
 		if !specific.Empty() {
 			// TODO(tejasmanohar): This shouldn't really be a "panic", as it's not a
