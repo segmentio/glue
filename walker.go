@@ -85,6 +85,8 @@ func (w *Walker) walkPackage(pkg *loader.PackageInfo, decl, service string) erro
 		if err := w.Writer.Write(fname, src); err != nil {
 			return err
 		}
+
+		log.Printf("glue: generated %s", ident)
 	}
 
 	return nil
