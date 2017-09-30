@@ -91,27 +91,6 @@ func (g *Generator) Generate(in GenerateInput) ([]byte, error) {
 	return formatted, err
 }
 
-func (g *Generator) getFuncImports(f *types.Func) *gen.StringSet {
-	packages := gen.NewStringSet()
-	signature := f.Type().(*types.Signature)
-
-	params := signature.Params()
-	for i := 0; i < params.Len(); i++ {
-		param := params.At(i)
-		path := param.Pkg().Path()
-		packages.Add(path)
-	}
-
-	results := signature.Results()
-	for i := 0; i < results.Len(); i++ {
-		res := results.At(i)
-		path := res.Pkg().Path()
-		packages.Add(path)
-	}
-
-	return packages
-}
-
 func mustParseTemplate(path string) *template.Template {
 	data, err := Asset(path)
 	if err != nil {
