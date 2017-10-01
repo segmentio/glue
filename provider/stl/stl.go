@@ -4,7 +4,6 @@ import (
 	"go/types"
 
 	"github.com/segmentio/glue/log"
-	"github.com/segmentio/glue/provider"
 	"github.com/segmentio/glue/provider/internal"
 )
 
@@ -60,17 +59,17 @@ func (p *Provider) IsSuitableMethod(method *types.Func) bool {
 }
 
 // GetArgType extracts metadata about the response type from an RPC method.
-func (p *Provider) GetArgType(f *types.Func) provider.TypeInfo {
+func (p *Provider) GetArgType(f *types.Func) types.Type {
 	signature := f.Type().(*types.Signature)
 	params := signature.Params()
 	arg := params.At(0)
-	return internal.GetTypeInfo(arg.Type())
+	return internal.Dereference(arg.Type())
 }
 
 // GetReplyType extracts metadata about the response type from an RPC method.
-func (p *Provider) GetReplyType(f *types.Func) provider.TypeInfo {
+func (p *Provider) GetReplyType(f *types.Func) types.Type {
 	signature := f.Type().(*types.Signature)
 	params := signature.Params()
 	reply := params.At(1)
-	return internal.GetTypeInfo(reply.Type())
+	return internal.Dereference(reply.Type())
 }

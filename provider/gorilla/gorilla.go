@@ -26,13 +26,13 @@ func (p *Provider) IsSuitableMethod(method *types.Func) bool {
 }
 
 // GetArgType proxies stl.GetArgType with a shifted function.
-func (p *Provider) GetArgType(f *types.Func) provider.TypeInfo {
+func (p *Provider) GetArgType(f *types.Func) types.Type {
 	newMethod := p.shiftReqParam(f)
 	return p.BaseProvider.GetArgType(newMethod)
 }
 
 // GetReplyType proxies stl.GetReplyType with a shifted function.
-func (p *Provider) GetReplyType(f *types.Func) provider.TypeInfo {
+func (p *Provider) GetReplyType(f *types.Func) types.Type {
 	newMethod := p.shiftReqParam(f)
 	return p.BaseProvider.GetReplyType(newMethod)
 }
