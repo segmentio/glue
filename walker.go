@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/segmentio/glue/generator"
 	"github.com/segmentio/glue/log"
 	"github.com/segmentio/glue/provider"
 	"github.com/segmentio/glue/writer"
@@ -67,12 +68,9 @@ func (w *Walker) walkPackage(pkg *loader.PackageInfo, decl, service string) erro
 	}
 
 	for _, funcs := range funcsByRecv {
-		generator := Generator{
-			Provider: w.Provider,
-		}
-
 		ident := fmt.Sprintf("%sClient", service)
-		src, err := generator.Generate(GenerateInput{
+		src, err := generator.Generate(generator.GenerateInput{
+			Provider:    w.Provider,
 			PackageName: "client",
 			Service:     service,
 			Funcs:       funcs,
