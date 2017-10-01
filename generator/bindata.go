@@ -83,7 +83,7 @@ func templatesClientGohtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "templates/client.gohtml", size: 571, mode: os.FileMode(420), modTime: time.Unix(1506818337, 0)}
+	info := bindataFileInfo{name: "templates/client.gohtml", size: 571, mode: os.FileMode(420), modTime: time.Unix(1506823411, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }

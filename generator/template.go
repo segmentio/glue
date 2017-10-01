@@ -1,5 +1,10 @@
 package generator
 
+import "html/template"
+
+//go:generate go-bindata -nomemcopy -pkg generator templates/...
+var tmpl = mustParseTemplate("templates/client.gohtml")
+
 // TemplateData structures input to the template/client.gohtml template.
 type TemplateData struct {
 	// Package is the name of the output package.
@@ -27,4 +32,15 @@ type MethodTemplate struct {
 type Import struct {
 	Name string
 	Path string
+}
+
+func mustParseTemplate(path string) *template.Template {
+	data, err := Asset(path)
+	if err != nil {
+		panic(err)
+	}
+
+	return template.Must(
+		template.New(path).Parse(string(data)),
+	)
 }

@@ -3,16 +3,12 @@ package generator
 import (
 	"bytes"
 	"go/types"
-	"html/template"
 	"log"
 
 	"github.com/segmentio/glue/provider"
 
 	"golang.org/x/tools/imports"
 )
-
-//go:generate go-bindata -nomemcopy -pkg generator templates/...
-var tmpl = mustParseTemplate("templates/client.gohtml")
 
 type GenerateInput struct {
 	Provider    provider.Provider
@@ -56,15 +52,4 @@ func Generate(in GenerateInput) ([]byte, error) {
 	}
 
 	return formatted, err
-}
-
-func mustParseTemplate(path string) *template.Template {
-	data, err := Asset(path)
-	if err != nil {
-		panic(err)
-	}
-
-	return template.Must(
-		template.New(path).Parse(string(data)),
-	)
 }
