@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/tejasmanohar/glue/client"
+	"github.com/segmentio/glue/client"
 
 	"github.com/segmentio/glue/example/gorilla/math"
 )
@@ -10,6 +10,18 @@ func NewMathClient(rpcClient client.Client) *Math {
 	c := new(Math)
 	c.RPC = rpcClient
 	return c
+}
+
+type MathIFace interface {
+	Sum(args math.SumArg) (*math.SumReply, error)
+
+	Identity(args int) (*int, error)
+
+	IdentityMany(args []int) (*[]int, error)
+
+	IdentityManyStruct(args []*math.IdentityStruct) (*[]math.IdentityStruct, error)
+
+	MapOfPrimitives(args map[string]string) (*[]int, error)
 }
 
 type Math struct {
@@ -34,7 +46,7 @@ func (c *Math) IdentityMany(args []int) (*[]int, error) {
 	return reply, err
 }
 
-func (c *Math) IdentityManyStruct(args []math.IdentityStruct) (*[]math.IdentityStruct, error) {
+func (c *Math) IdentityManyStruct(args []*math.IdentityStruct) (*[]math.IdentityStruct, error) {
 	reply := new([]math.IdentityStruct)
 	err := c.RPC.Call("Math.IdentityManyStruct", args, reply)
 	return reply, err

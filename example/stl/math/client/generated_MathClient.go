@@ -14,6 +14,14 @@ func NewMathClient(rpcClient client.Client) *Math {
 	return c
 }
 
+type MathIFace interface {
+	Sum(args math.SumArg) (*math.SumReply, error)
+
+	Identity(args int) (*int, error)
+
+	Abs(args math1.AbsArg) (*float64, error)
+}
+
 type Math struct {
 	RPC client.Client
 }

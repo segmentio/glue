@@ -1,30 +1,33 @@
-// Template Set type
+// Package set is a template Set type
 //
 // Tries to be similar to Python's set type
 package gen
 
+// An A is the element of the set
+//
 // template type Set(A)
 
-// Store struct{} which are 0 size as the members in the map
+// SetNothing is used as a zero sized member in the map
 type StringSetNothing struct{}
 
+// Set provides a general purpose set modeled on Python's set type.
 type StringSet struct {
 	m map[string]StringSetNothing
 }
 
-// Returns a new empty set with the given capacity
+// NewSizedSet returns a new empty set with the given capacity
 func NewSizedStringSet(capacity int) *StringSet {
 	return &StringSet{
 		m: make(map[string]StringSetNothing, capacity),
 	}
 }
 
-// Returns a new empty set
+// NewSet returns a new empty set
 func NewStringSet() *StringSet {
 	return NewSizedStringSet(0)
 }
 
-// Returns the number of elements in the set
+// Len returns the number of elements in the set
 func (s *StringSet) Len() int {
 	return len(s.m)
 }
@@ -184,21 +187,66 @@ func (s *StringSet) Update(other *StringSet) *StringSet {
 	return s
 }
 
-/*
- |  isdisjoint(...)
- |      Return True if two sets have a null intersection.
- |
- |  issubset(...)
- |      Report whether another set contains this set.
- |
- |  issuperset(...)
- |      Report whether this set contains another set.
- |
- |  symmetric_difference(...)
- |      Return the symmetric difference of two sets as a new set.
- |
- |      (i.e. all elements that are in exactly one of the sets.)
- |
- |  symmetric_difference_update(...)
- |      Update a set with the symmetric difference of itself and another.
-*/
+// IsSuperset returns a bool indicating whether this set is a superset of other set.
+func (s *StringSet) IsSuperset(strict bool, other *StringSet) bool {
+	if strict && len(other.m) >= len(s.m) {
+		return false
+	}
+string:
+	for v := range other.m {
+		for i := range s.m {
+			if v == i {
+				continue string
+			}
+		}
+		return false
+	}
+	return true
+}
+
+// IsSubset returns a bool indicating whether this set is a subset of other set.
+func (s *StringSet) IsSubset(strict bool, other *StringSet) bool {
+	if strict && len(s.m) >= len(other.m) {
+		return false
+	}
+string:
+	for v := range s.m {
+		for i := range other.m {
+			if v == i {
+				continue string
+			}
+		}
+		return false
+	}
+	return true
+}
+
+// IsDisjoint returns a bool indicating whether this set and other set have no elements in common.
+func (s *StringSet) IsDisjoint(other *StringSet) bool {
+	for v := range s.m {
+		if other.Contains(v) {
+			return false
+		}
+	}
+	return true
+}
+
+// SymmetricDifference returns a new set of all elements that are a member of exactly
+// one of this set and other set(elements which are in one of the sets, but not in both).
+func (s *StringSet) SymmetricDifference(other *StringSet) *StringSet {
+	work1 := s.Union(other)
+	work2 := s.Intersection(other)
+	for v := range work2.m {
+		delete(work1.m, v)
+	}
+	return work1
+}
+
+// SymmetricDifferenceUpdate modifies this set to be a set of all elements that are a member
+// of exactly one of this set and other set(elements which are in one of the sets,
+// but not in both) and returns this set.
+func (s *StringSet) SymmetricDifferenceUpdate(other *StringSet) *StringSet {
+	work := s.SymmetricDifference(other)
+	*s = *work
+	return s
+}
