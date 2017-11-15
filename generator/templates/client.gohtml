@@ -13,6 +13,12 @@ func New{{ .Service }}Client(rpcClient client.Client) *{{ .Service }} {
   return c
 }
 
+type {{ .Service }}IFace interface {
+  {{ range .Methods }}
+    {{ .Name }}(args {{ .ArgType }}) (*{{ .ReplyType }}, error)
+  {{ end }}
+}
+
 type {{ .Service }} struct {
   RPC client.Client
 }
