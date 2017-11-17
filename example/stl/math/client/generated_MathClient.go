@@ -15,31 +15,31 @@ func NewMathClient(rpcClient client.Client) *Math {
 }
 
 type MathIFace interface {
-	Sum(args math.SumArg) (*math.SumReply, error)
+	Sum(args math.SumArg) (math.SumReply, error)
 
-	Identity(args int) (*int, error)
+	Identity(args int) (int, error)
 
-	Abs(args math1.AbsArg) (*float64, error)
+	Abs(args math1.AbsArg) (float64, error)
 }
 
 type Math struct {
 	RPC client.Client
 }
 
-func (c *Math) Sum(args math.SumArg) (*math.SumReply, error) {
-	reply := new(math.SumReply)
+func (c *Math) Sum(args math.SumArg) (math.SumReply, error) {
+	var reply math.SumReply
 	err := c.RPC.Call("Math.Sum", args, reply)
 	return reply, err
 }
 
-func (c *Math) Identity(args int) (*int, error) {
-	reply := new(int)
+func (c *Math) Identity(args int) (int, error) {
+	var reply int
 	err := c.RPC.Call("Math.Identity", args, reply)
 	return reply, err
 }
 
-func (c *Math) Abs(args math1.AbsArg) (*float64, error) {
-	reply := new(float64)
+func (c *Math) Abs(args math1.AbsArg) (float64, error) {
+	var reply float64
 	err := c.RPC.Call("Math.Abs", args, reply)
 	return reply, err
 }
