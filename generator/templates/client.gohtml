@@ -26,7 +26,7 @@ type {{ .Service }} struct {
 {{ range .Methods }}
   func (c *{{ $.Service }}) {{ .Name }}(args {{ .ArgType }}) ({{ .ReplyType }}, error) {
     var reply {{ .ReplyType }}
-    err := c.RPC.Call("{{ $.Service }}.{{ .Name }}", args, reply)
+    err := c.RPC.Call("{{ $.Service }}.{{ .Name }}", args, &reply)
     return reply, err
   }
 {{ end }}
