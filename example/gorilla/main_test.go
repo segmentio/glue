@@ -32,7 +32,7 @@ func SumTest(t *testing.T) {
 
 	const expected = 20
 	if res.Sum == expected {
-		t.Errorf("got %d, expected %d", *res, in)
+		t.Errorf("got %d, expected %d", res, in)
 	}
 }
 
@@ -44,7 +44,7 @@ func IdentityTest(t *testing.T) {
 		return
 	}
 
-	if *res != in {
-		t.Errorf("got %d, expected %d", *res, in)
+	if res != in {
+		t.Errorf("got %d, expected %d", res, in)
 	}
 }
