@@ -14,14 +14,16 @@ type GenerateInput struct {
 	Provider    provider.Provider
 	PackageName string
 	Service     string
+	UseContext  bool
 
 	Funcs []*types.Func
 }
 
 func Generate(in GenerateInput) ([]byte, error) {
 	data := TemplateData{
-		Package: in.PackageName,
-		Service: in.Service,
+		Package:    in.PackageName,
+		Service:    in.Service,
+		UseContext: in.UseContext,
 	}
 
 	resolver := newResolver()

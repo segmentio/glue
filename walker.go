@@ -28,6 +28,8 @@ type Directions struct {
 	Name string
 	// Service is the name of the RPC service. (e.g. `Math` in `Math.Sum`)
 	Service string
+	// UseContext indicates whether to use context.Context for RPC clients.
+	UseContext bool
 }
 
 // Walk is the logical entrypoint for Glue. It walks the source code and asks
@@ -46,7 +48,7 @@ func (w *Walker) Walk(directions Directions) error {
 		wg.Add(1)
 		go func(p *loader.PackageInfo) {
 			defer wg.Done()
-			w.walkPackage(p, directions.Name, directions.Service)
+			w.walkPackage(p, directions.Name, directions.Service, directions.UseContext)
 		}(pkg)
 	}
 
@@ -54,7 +56,7 @@ func (w *Walker) Walk(directions Directions) error {
 	return nil
 }
 
-func (w *Walker) walkPackage(pkg *loader.PackageInfo, decl, service string) error {
+func (w *Walker) walkPackage(pkg *loader.PackageInfo, decl, service string, useContext bool) error {
 	visitor := NewVisitor(VisitorConfig{
 		Pkg:         pkg,
 		Provider:    w.Provider,
@@ -74,6 +76,7 @@ func (w *Walker) walkPackage(pkg *loader.PackageInfo, decl, service string) erro
 			PackageName: "client",
 			Service:     service,
 			Funcs:       funcs,
+			UseContext:  useContext,
 		})
 		if err != nil {
 			return err

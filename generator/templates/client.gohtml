@@ -1,13 +1,18 @@
 package {{ .Package }}
 
 import (
+  {{ if .UseContext }}
+    "context"
+  {{ end }}
+
   "github.com/segmentio/glue/client"
+
   {{ range .Imports }}
     {{ .Name }} "{{ .Path }}"
   {{ end }}
 )
 
-func New{{ .Service }}Client(rpcClient client.Client) *{{ .Service }} {
+func New{{ .Service }}Client(rpcClient {{ if .UseContext }}client.ClientContext{{ else }}client.Client{{ end }}) *{{ .Service }} {
   c := new({{ .Service }})
   c.RPC = rpcClient
   return c
@@ -20,13 +25,13 @@ type {{ .Service }}IFace interface {
 }
 
 type {{ .Service }} struct {
-  RPC client.Client
+  RPC {{ if .UseContext }}client.ClientContext{{ else }}client.Client{{ end }}
 }
 
 {{ range .Methods }}
-  func (c *{{ $.Service }}) {{ .Name }}(args {{ .ArgType }}) ({{ .ReplyType }}, error) {
+  func (c *{{ $.Service }}) {{ .Name }}({{ if $.UseContext }}ctx context.Context, {{ end }}args {{ .ArgType }}) ({{ .ReplyType }}, error) {
     var reply {{ .ReplyType }}
-    err := c.RPC.Call("{{ $.Service }}.{{ .Name }}", args, &reply)
+    err := c.RPC.Call({{ if $.UseContext }}ctx,{{ end }} "{{ $.Service }}.{{ .Name }}", args, &reply)
     return reply, err
   }
 {{ end }}
