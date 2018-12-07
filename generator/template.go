@@ -15,8 +15,6 @@ type TemplateData struct {
 	Imports []Import
 	// Identifier is the name of the RPC client struct.
 	Identifier string
-	// UseContext indicates whether the RPC client uses context.Context.
-	UseContext bool
 	// Methods is a list of method metadata.
 	Methods []MethodTemplate
 }
