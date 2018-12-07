@@ -1,6 +1,8 @@
 package {{ .Package }}
 
 import (
+  "context"
+
   "github.com/segmentio/glue/client"
   {{ range .Imports }}
     {{ .Name }} "{{ .Path }}"
@@ -19,6 +21,13 @@ type {{ .Service }}IFace interface {
   {{ end }}
 }
 
+type {{ .Service }}ContextIFace interface {
+  {{ range .Methods }}
+    {{ .Name }}(args {{ .ArgType }}) ({{ .ReplyType }}, error)
+    {{ .Name }}Context(ctx context.Context, args {{ .ArgType }}) ({{ .ReplyType }}, error)
+  {{ end }}
+}
+
 type {{ .Service }} struct {
   RPC client.Client
 }
@@ -27,6 +36,12 @@ type {{ .Service }} struct {
   func (c *{{ $.Service }}) {{ .Name }}(args {{ .ArgType }}) ({{ .ReplyType }}, error) {
     var reply {{ .ReplyType }}
     err := c.RPC.Call("{{ $.Service }}.{{ .Name }}", args, &reply)
+    return reply, err
+  }
+
+  func (c *{{ $.Service }}) {{ .Name }}Context(ctx context.Context, args {{ .ArgType }}) ({{ .ReplyType }}, error) {
+    var reply {{ .ReplyType }}
+    err := c.RPC.CallContext(ctx, "{{ $.Service }}.{{ .Name }}", args, &reply)
     return reply, err
   }
 {{ end }}

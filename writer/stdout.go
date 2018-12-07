@@ -11,6 +11,6 @@ func NewStdoutWriter() *StdoutWriter {
 }
 
 func (s *StdoutWriter) Write(_path string, data []byte) error {
-	log.Print(data)
+	log.Print(string(data))
 	return nil
 }
